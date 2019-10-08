@@ -1,6 +1,7 @@
 type Query{
     searchResult(query: String!): [song!]
-    playlists: [Playlist!]
+    playlists(listId: String!): PlayList
+    playlists(userId: String!): [Playlist!]
     user: User
 }
 
