@@ -1,0 +1,57 @@
+type Query{
+    searchResult(query: String!): [song!]
+    playlists: [Playlist!]
+    user: User
+}
+
+type Mutation{
+    createPlayList(data: CreatePlayListInput!): PlayList!
+    createUser(data: CreateUserInput): User!
+}
+
+type CreatePlayListInput{
+    name: String!
+    ownerId: String!
+    des: String!
+    cover: String!
+    songs: [CreateSongInput!]
+}
+
+type CreateUserInput{
+    name: String!
+    bio: String!
+}
+
+type CreateSongInput{
+    url: String!
+    name: String!
+    cover: String!
+    duration: String!
+}
+
+type PlayList{
+    id: ID!
+    owner: User!
+    name: String!
+    des: String!
+    cover: String!
+    createAt: String!
+    updateAt: String!
+    songs: [Song!]!
+}
+
+type User{
+    id: ID!
+    name: String!
+    bio: String!
+    playlists: [Playlist!]
+}
+
+type Song{
+    id: ID!
+    list: Playlist!
+    url: String!
+    name: String!
+    cover: String!
+    duration: String!
+}
