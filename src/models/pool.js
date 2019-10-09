@@ -1,23 +1,26 @@
 import mysql from 'mysql'
 import fs from 'fs'
 
-console.log(process.env.DB_HOST)
-let pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS,
-  ssl: {
-      ca: fs.readFileSync(__dirname + '/ssl/server-ca.pem'),
-      cert: fs.readFileSync(__dirname + '/ssl/client-cert.pem'),
-      key: fs.readFileSync(__dirname + '/ssl/client-key.pem')
-  }
-})
+// Constructor func 
+function pool(){
+    this.pool = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        database: process.env.DB_DATABASE,
+        password: process.env.DB_PASS,
+        ssl: {
+            ca: fs.readFileSync(__dirname + '/ssl/server-ca.pem'),
+            cert: fs.readFileSync(__dirname + '/ssl/client-cert.pem'),
+            key: fs.readFileSync(__dirname + '/ssl/client-key.pem')
+        }
+    })
+}
 
-function getData(pool, query) {
+// Object Method
+pool.prototype.getData = function(query){
     return new Promise((resolve, reject) => {
         try {
-            pool.getConnection((err, conn)=>{
+            this.pool.getConnection((err, conn)=>{
                 if(err) throw error
                 conn.query(query, (error, result) => {
                     if (error) {
@@ -35,10 +38,10 @@ function getData(pool, query) {
     })
 }
 
-function applyQuery(pool, query) {
+pool.prototype.applyQuery = function(query){
     return new Promise((resolve, reject) => {
         try {
-            pool.getConnection((err, conn)=>{
+            this.pool.getConnection((err, conn)=>{
                 conn.query(query, (eror, results) => {
                     console.log(query)
                     if(err) throw err 
@@ -52,24 +55,5 @@ function applyQuery(pool, query) {
         }
     })
 }
-
-function getMultipleData(queryArray) {
-    return Promise.all(queryArray)
-}
-
-function createAccount(userData) {
-    const sql = 'INSERT INTO User SET ?';
-    const insert = userData;
-    const query = mysql.format(sql, insert);
-    applyQuery(pool, query);
-}
-
-/*
-connection.applyQuery = applyQuery 
-connection.getData = getData
-connection.getMultipleData = getMultipleData
-*/
-
-
 
 export default pool

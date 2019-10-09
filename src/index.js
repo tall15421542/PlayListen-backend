@@ -3,6 +3,10 @@ import cors from 'cors';
 import express from 'express';
 import {ApolloServer, gql} from 'apollo-server-express';
 import db from './models/index.js'
+
+var model = new db()
+
+
 /*
 const app = express();
 app.use(cors());
