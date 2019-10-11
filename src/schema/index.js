@@ -29,7 +29,7 @@ input CreateUserInput{
 }
 
 input CreateSongInput{
-    url: String!
+    sourceId: String!
     name: String!
     cover: String!
     duration: String!
@@ -56,7 +56,7 @@ type User{
 type Song{
     id: ID!
     listId: String!
-    url: String!
+    sourceId: String!
     name: String!
     cover: String!
     duration: String!

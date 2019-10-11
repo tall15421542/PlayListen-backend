@@ -6,7 +6,7 @@ function song(conn){
 
 // Object Method
 song.prototype.createMultipleInstance = async function(listId, songs){
-    const sql = 'INSERT INTO Song (listId, url, songName, songCover, songDes, duration) VALUES ?'
+    const sql = 'INSERT INTO Song (listId, sourceId, songName, songCover, songDes, duration) VALUES ?'
     var insert = []
     const songsNum = songs.length
     for(var i = 0 ; i < songsNum ; ++i){
@@ -29,7 +29,7 @@ song.prototype.getMultipleInstance = async function(listId){
 function CreateSongInput_to_DatabaseSchema(listId, CreateSongInput){
     return [
         listId, 
-        CreateSongInput.url,
+        CreateSongInput.sourceId,
         CreateSongInput.name,
         CreateSongInput.cover,
         "",

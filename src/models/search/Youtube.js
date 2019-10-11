@@ -11,20 +11,20 @@ function Youtube(){
 Youtube.prototype.getPlayListInfo = async function(playlistId) {
     const body = await this.api.playlistItems.list({
         playlistId: playlistId,
-        part: 'contentDetails',
+        part: 'snippet',
         maxResults: 50,
     });
     const songlist = body.data.items;
     let songlistInfo = [];
     songlist.map((song) => {
+        console.log(song);
         songlistInfo.push({
-            songName: song.contentDetails.title,
-            url: idToUrl(song.contentDetails.videoId),
-            cover: getCoverImage(song.contentDetails.videoId),
-            duration: song.contentDetails.duration,
+            songName: song.snippet.title,
+            sourceId: song.snippet.resourceId.videoId,
+            cover: getCoverImage(song.snippet.videoId),
+            duration: "not support yet",
         });
     });
-    console.log(songlistInfo)
     return songlistInfo;
 }
 
@@ -38,7 +38,7 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
     let songInfoArray = [
         {
             songName: body.data.items[0].contentDetails.title,
-            url: idToUrl(videoId),
+            sourceId: videoId,
             cover: getCoverImage(videoId),
             duration: body.data.items[0].contentDetails.duration,
         },
@@ -76,7 +76,7 @@ Youtube.prototype.getURLInfoArray = async function(URL) {
     res.data.items.map((element) => {
         songInfoArray.push({
             songName: element.snippet.title,
-            url: idToUrl(element.id.videoId),
+            sourceId: element.id.videoId,
             cover: getCoverImage(element.id.videoId),
             duration: "PT0M0S",
         });

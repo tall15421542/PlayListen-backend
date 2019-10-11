@@ -23,7 +23,7 @@ function song_database_to_graphql(song_database){
     return{
         id: song_database.songId,
         listId: song_database.listId,
-        url: song_database.url,
+        sourceId: song_database.sourceId,
         name: song_database.songName,
         cover: song_database.cover,
         duration: song_database.duration 
