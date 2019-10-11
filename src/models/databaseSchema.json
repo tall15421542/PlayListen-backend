@@ -16,7 +16,8 @@
             "songCover": { "type": "String" },
             "songDes": { "type": "String" },
             "createAt": { "type": "TimeStamp" },
-            "updateAt": { "type": "TimeStamp" }
+            "updateAt": { "type": "TimeStamp" },
+            "duration": { "type": "String" }
         },
         "List":{
             "listId": { "type": "Int" },

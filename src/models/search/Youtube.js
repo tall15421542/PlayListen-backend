@@ -19,7 +19,7 @@ Youtube.prototype.getPlayListInfo = async function(playlistId) {
     songlist.map((song) => {
         songlistInfo.push({
             songName: song.contentDetails.title,
-            url: song.contentDetails.videoId,
+            url: idToUrl(song.contentDetails.videoId),
             cover: getCoverImage(song.contentDetails.videoId),
             duration: song.contentDetails.duration,
         });
@@ -38,7 +38,7 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
     let songInfoArray = [
         {
             songName: body.data.items[0].contentDetails.title,
-            url: videoId,
+            url: idToUrl(videoId),
             cover: getCoverImage(videoId),
             duration: body.data.items[0].contentDetails.duration,
         },
@@ -76,7 +76,7 @@ Youtube.prototype.getURLInfoArray = async function(URL) {
     res.data.items.map((element) => {
         songInfoArray.push({
             songName: element.snippet.title,
-            url: element.id.videoId,
+            url: idToUrl(element.id.videoId),
             cover: getCoverImage(element.id.videoId),
             duration: "PT0M0S",
         });
@@ -95,6 +95,10 @@ function urlToId(url) {
 function getCoverImage(id) {
     let url = 'https://img.youtube.com/vi/' + id + '/sddefault.jpg';
     return url;
+}
+
+function idToUrl(ytId){
+    return 'https://www.youtube.com/watch?v=' + ytId
 }
 
 export default Youtube
