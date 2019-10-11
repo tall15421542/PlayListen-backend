@@ -10,10 +10,12 @@ songList.prototype.getById = async function(listId){
     const sql = 'SELECT * from List where listId = ?'
     const insert = [listId];
     const query = mysql.format(sql, insert);
-    var listInfo = await this.conn.getData(query);
-    console.log(listInfo[0])
-    const songsInfo = await this.songModel.getMultipleInstance(listInfo[0].listId)
+    var result = await this.conn.getData(query);
+    var listInfo = result[0]
+    console.log(listInfo)
+    const songsInfo = await this.songModel.getMultipleInstance(listInfo.listId)
     listInfo.songsInfo = songsInfo
+    console.log(listInfo)
     return listInfo 
 }
 
@@ -22,9 +24,9 @@ songList.prototype.create = async function(CreateSongListInput){
     const insert = [CreateSongListInput_to_DatabaseSchema(CreateSongListInput)]
     const query = mysql.format(sql, insert)
     var result = await this.conn.applyQuery(query) // Promise 
-    console.log(result)
-    result = await this.songModel.createMultipleInstance(result.insertId, CreateSongListInput.songs) // Promise
-    console.log(result)
+    var insertId = result.insertId
+    result = await this.songModel.createMultipleInstance(insertId, CreateSongListInput.songs) // Promise
+    return insertId
 }
 
 // Helper method

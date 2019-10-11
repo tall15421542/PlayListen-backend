@@ -22,7 +22,6 @@ song.prototype.getMultipleInstance = async function(listId){
     const insert = [listId]
     const query = mysql.format(sql, insert)
     const result = await this.conn.getData(query)
-    console.log(result)
     return result
 }
 
