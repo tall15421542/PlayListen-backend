@@ -3,16 +3,16 @@ import { gql } from 'apollo-server-express'
 const schema = gql`
 type Query{
     searchResult(query: String!): [Song!]
-    playlist(listId: String!): PlayList
+    playlist(listId: String!): Playlist
     user(userId: String!): User
 }
 
 type Mutation{
-    createPlayList(data: CreatePlayListInput!): PlayList!
+    createPlaylist(data: CreatePlaylistInput!): Playlist!
     createUser(data: CreateUserInput): User!
 }
 
-input CreatePlayListInput{
+input CreatePlaylistInput{
     name: String!
     ownerId: String!
     des: String!
@@ -35,7 +35,7 @@ input CreateSongInput{
     duration: String!
 }
 
-type PlayList{
+type Playlist{
     id: ID!
     owner: User!
     name: String!

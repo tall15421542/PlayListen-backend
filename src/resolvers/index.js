@@ -62,7 +62,7 @@ export default{
     },
 
     Mutation: {
-        createPlayList: async(parent, {data}, {model}) =>{
+        createPlaylist: async(parent, {data}, {model}) =>{
             const listId = await model.songList.create(data)
             const list = await model.songList.getById(listId)
             return songList_database_to_graphql(list) 
@@ -74,7 +74,7 @@ export default{
         }
     },
 
-    PlayList: {
+    Playlist: {
         songs: async (playlist, args, { model} ) => {
             const result = await model.song.getMultipleInstance(playlist.id)
             return songs_to_graphql(result)
