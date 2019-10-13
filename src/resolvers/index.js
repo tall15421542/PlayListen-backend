@@ -25,7 +25,7 @@ function song_database_to_graphql(song_database){
         listId: song_database.listId,
         sourceId: song_database.sourceId,
         name: song_database.songName,
-        cover: song_database.cover,
+        cover: song_database.songCover,
         duration: song_database.duration 
     }
 }

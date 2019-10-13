@@ -14,7 +14,6 @@ songList.prototype.getById = async function(listId){
     var listInfo = result[0]
     const songsInfo = await this.songModel.getMultipleInstance(listInfo.listId)
     listInfo.songsInfo = songsInfo
-    console.log(listInfo)
     return listInfo 
 }
 
