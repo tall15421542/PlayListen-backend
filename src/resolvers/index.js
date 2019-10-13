@@ -12,7 +12,7 @@ function songList_database_to_graphql(list_database){
         id: list_database.listId,
         ownerId: list_database.userId,
         name: list_database.listName,
-        des: list_database.des,
+        des: list_database.listDes,
         cover: list_database.listCover,
         createAt: list_database.createAt,
         updateAt: list_database.updateAt,
@@ -56,7 +56,6 @@ export default{
 
         searchResult: async(parent, {query}, {model}) => {
             const result = await model.search.youtube.getURLInfoArray(query)
-            console.log(result)
             return songs_to_graphql(result)
         }
     },
@@ -78,6 +77,10 @@ export default{
         songs: async (playlist, args, { model} ) => {
             const result = await model.song.getMultipleInstance(playlist.id)
             return songs_to_graphql(result)
+        },
+        owner: async(playlist, args, {model} ) => {
+            const result = await model.user.getById(playlist.ownerId)
+            return user_database_to_graphql(result)
         }
     }
 

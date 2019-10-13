@@ -12,7 +12,6 @@ songList.prototype.getById = async function(listId){
     const query = mysql.format(sql, insert);
     var result = await this.conn.getData(query);
     var listInfo = result[0]
-    console.log(listInfo)
     const songsInfo = await this.songModel.getMultipleInstance(listInfo.listId)
     listInfo.songsInfo = songsInfo
     console.log(listInfo)
