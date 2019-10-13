@@ -21,7 +21,7 @@ Youtube.prototype.getPlayListInfo = async function(playlistId) {
         songlistInfo.push({
             songName: song.snippet.title,
             sourceId: song.snippet.resourceId.videoId,
-            cover: getCoverImage(song.snippet.videoId),
+            songCover: getCoverImage(song.snippet.videoId),
             duration: "not support yet",
         });
     });
@@ -39,7 +39,7 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
         {
             songName: body.data.items[0].contentDetails.title,
             sourceId: videoId,
-            cover: getCoverImage(videoId),
+            songCover: getCoverImage(videoId),
             duration: body.data.items[0].contentDetails.duration,
         },
     ];
@@ -77,7 +77,7 @@ Youtube.prototype.getURLInfoArray = async function(URL) {
         songInfoArray.push({
             songName: element.snippet.title,
             sourceId: element.id.videoId,
-            cover: getCoverImage(element.id.videoId),
+            songCover: getCoverImage(element.id.videoId),
             duration: "PT0M0S",
         });
     });
