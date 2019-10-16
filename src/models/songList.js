@@ -17,13 +17,13 @@ songList.prototype.getById = async function(listId){
     return listInfo 
 }
 
-songList.prototype.create = async function(CreateSongListInput){
+songList.prototype.create = async function(CreateSongListInput, sourceType){
     const sql = 'INSERT INTO List SET ?'
     const insert = [CreateSongListInput_to_DatabaseSchema(CreateSongListInput)]
     const query = mysql.format(sql, insert)
     var result = await this.conn.applyQuery(query) // Promise 
     var insertId = result.insertId
-    result = await this.songModel.createMultipleInstance(insertId, CreateSongListInput.songs) // Promise
+    result = await this.songModel.createMultipleInstance(insertId, CreateSongListInput.songs, sourceType) // Promise
     return insertId
 }
 

@@ -34,7 +34,6 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
         id: videoId,
         part: 'contentDetails',
     });
-    console.log(body.data.items)
     let songInfoArray = [
         {
             songName: body.data.items[0].contentDetails.title,
@@ -43,7 +42,6 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
             duration: body.data.items[0].contentDetails.duration,
         },
     ];
-    console.log(songInfoArray)
     return songInfoArray;
 }
 
@@ -82,6 +80,22 @@ Youtube.prototype.getURLInfoArray = async function(URL) {
         });
     });
     return songInfoArray
+}
+
+Youtube.prototype.setDuration = async function(songs){
+    var idList = []
+    const length = songs.length
+    for(var i = 0 ; i < length ; ++i){
+        idList.push(songs[i].sourceId)
+    }
+    idList = idList.join(",")
+    const res = await this.api.videos.list({
+        part: 'contentDetails',
+        id: idList 
+    })
+    for(var i = 0 ; i < length ; ++i){
+        songs[i].duration = res.data.items[i].contentDetails.duration
+    }
 }
 
 // Helper func

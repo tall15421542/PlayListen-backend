@@ -6,10 +6,10 @@ import Search from './search/index'
 
 function model(){
     this.conn = new connection()
-    this.song = new songModel(this.conn)
+    this.search = new Search() 
+    this.song = new songModel(this.conn, this.search)
     this.user = new userModel(this.conn)
     this.songList = new songListModel(this.conn, this.song)
-    this.search = new Search() 
 }
 
 export default model;

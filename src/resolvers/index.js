@@ -1,3 +1,6 @@
+import { GraphQLScalarType } from 'graphql'
+import { Kind } from 'graphql/language'
+
 function user_database_to_graphql(user_database){
     return{
         id: user_database.userId,
@@ -14,8 +17,8 @@ function songList_database_to_graphql(list_database){
         name: list_database.listName,
         des: list_database.listDes,
         cover: list_database.listCover,
-        createAt: list_database.createAt,
-        updateAt: list_database.updateAt,
+        createdAt: list_database.createdAt,
+        updatedAt: list_database.updatedAt,
     }
 }
 
@@ -62,7 +65,7 @@ export default{
 
     Mutation: {
         createPlaylist: async(parent, {data}, {model}) =>{
-            const listId = await model.songList.create(data)
+            const listId = await model.songList.create(data, 'youtube')
             const list = await model.songList.getById(listId)
             return songList_database_to_graphql(list) 
         },
@@ -82,7 +85,25 @@ export default{
             const result = await model.user.getById(playlist.ownerId)
             return user_database_to_graphql(result)
         }
-    }
+    },
 
-    
+    Date: new GraphQLScalarType({
+        name: 'Date',
+        description: 'custom scalar type Date',
+        serialize(value){
+            return value.getTime();
+        },
+        parseValue(value){
+            return new Date(value);
+        },
+        parseLiteral(ast){
+            if(ast.kind == Kind.INT){
+                return new Date(parseInt(ast.value, 10));
+            }
+            else if(ast.kind == Kind.STRING){
+                return new Date(ast.value);
+            }
+            return null;
+        }
+    })
 }

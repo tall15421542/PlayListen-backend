@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express'
 
 const schema = gql`
+scalar Date
 type Query{
     searchResult(query: String!): [Song!]
     playlist(listId: String!): Playlist
@@ -41,8 +42,8 @@ type Playlist{
     name: String!
     des: String!
     cover: String!
-    createAt: String!
-    updateAt: String!
+    createdAt: Date!
+    updatedAt: Date!
     songs: [Song!]!
 }
 
