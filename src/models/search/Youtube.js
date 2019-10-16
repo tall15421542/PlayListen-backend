@@ -32,11 +32,11 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
     let videoId = urlToId(URL);
     const body = await this.api.videos.list({
         id: videoId,
-        part: 'contentDetails',
+        part: 'contentDetails, snippet',
     });
     let songInfoArray = [
         {
-            songName: body.data.items[0].contentDetails.title,
+            songName: body.data.items[0].snippet.title,
             sourceId: videoId,
             songCover: getCoverImage(videoId),
             duration: body.data.items[0].contentDetails.duration,
