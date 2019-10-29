@@ -21,7 +21,7 @@ pool.prototype.getData = function(query){
     return new Promise((resolve, reject) => {
         try {
             this.pool.getConnection((err, conn)=>{
-                if(err) throw error
+                if(err) throw err
                 conn.query(query, (error, result) => {
                     if (error) {
                         throw error
