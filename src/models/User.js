@@ -18,8 +18,26 @@ User.prototype.create = async function(CreateUserInput){
     const insert = CreateUserInput;
     const query = mysql.format(sql, insert);
     const result = await this.conn.applyQuery(query); // Promise
-    console.log(result)
-    return CreateUserInput
+    return await this.getById(result.insertId)
+}
+
+User.prototype.exist = async function(user){
+    const sql = 'SELECT 1 FROM User WHERE (userName = ? and email = ?)'
+    const insert = [user.userName, user.email]
+    const query = mysql.format(sql, insert);
+    const result = await this.conn.applyQuery(query)
+    return result.length === 1
+}
+
+User.prototype.getByName = async function(name){
+    const sql = 'SELECT * FROM User WHERE userName = ?'
+    const insert = [name]
+    const query = mysql.format(sql, insert)
+    const result = await this.conn.getData(query)
+    if(result){
+        return result[0]
+    }
+    return null
 }
 
 export default User

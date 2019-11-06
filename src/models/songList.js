@@ -1,12 +1,12 @@
 import mysql from 'mysql'
 // Construct func
-function songList(conn, songModel){
+function songlist(conn, songModel){
     this.conn = conn;
     this.songModel = songModel
 }
 
 // Object Method
-songList.prototype.getById = async function(listId){
+songlist.prototype.getById = async function(listId){
     const sql = 'SELECT * from List where listId = ?'
     const insert = [listId];
     const query = mysql.format(sql, insert);
@@ -17,24 +17,26 @@ songList.prototype.getById = async function(listId){
     return listInfo 
 }
 
-songList.prototype.create = async function(CreateSongListInput, sourceType){
+songlist.prototype.create = async function(CreateSonglistInput, sourceType){
     const sql = 'INSERT INTO List SET ?'
-    const insert = [CreateSongListInput_to_DatabaseSchema(CreateSongListInput)]
+    const insert = [CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput)]
     const query = mysql.format(sql, insert)
     var result = await this.conn.applyQuery(query) // Promise 
     var insertId = result.insertId
-    result = await this.songModel.createMultipleInstance(insertId, CreateSongListInput.songs, sourceType) // Promise
+    result = await this.songModel.createMultipleInstance(insertId, CreateSonglistInput.songs, sourceType) // Promise
     return insertId
 }
 
+
+
 // Helper method
-function CreateSongListInput_to_DatabaseSchema(CreateSongListInput){
+function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
     return {
-        userId: CreateSongListInput.ownerId,
-        listName: CreateSongListInput.name,
-        listDes: CreateSongListInput.des,
-        listCover: CreateSongListInput.cover,
+        userId: CreateSonglistInput.ownerId,
+        listName: CreateSonglistInput.name,
+        listDes: CreateSonglistInput.des,
+        listCover: CreateSonglistInput.cover,
     }
 }
 
-export default songList
+export default songlist

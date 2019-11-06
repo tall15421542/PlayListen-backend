@@ -5,6 +5,7 @@ import {ApolloServer, gql} from 'apollo-server-express';
 import db from './models/index'
 import schema from './schema/index'
 import resolvers from './resolvers/index'
+import jwt from 'jsonwebtoken'
 
 var model = new db()
 
@@ -14,9 +15,17 @@ app.use(cors());
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-    context: {
-        model: model
-    },
+    context: async({req}) => {
+        const token = req.headers['x-token']
+        if(token){
+            const me = await jwt.verify(token, process.env.TOKEN_SECRET);
+            return{
+                me: me, 
+                model: model
+            }
+        }
+        return {model}
+    }, 
 });
 
 server.applyMiddleware({app, path: '/graphql'});

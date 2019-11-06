@@ -10,24 +10,41 @@ type Query{
 
 type Mutation{
     createPlaylist(data: CreatePlaylistInput!): Playlist!
-    createUser(data: CreateUserInput): User!
+    createUser(data: CreateUserInput): CreateUserPayload!
+    signIn(data: SignInInput): SignInPayload!
+}
+
+type SignInPayload{
+    user: User 
+    token: String 
+    result: String!
+}
+
+type CreateUserPayload{
+    user: User 
+    token: String 
+    result: String!
+}
+
+input SignInInput{
+    userName: String!
+    password: String!
 }
 
 input CreatePlaylistInput{
     name: String!
     ownerId: String!
-    des: String!
-    cover: String!
+    des: String
+    cover: String
     songs: [CreateSongInput!]
 }
 
 input CreateUserInput{
-    userId: String!
     userName: String!
-    avatar: String!
+    email: String!
     password: String!
-    bio: String!
 }
+
 
 input CreateSongInput{
     sourceId: String!
@@ -50,8 +67,10 @@ type Playlist{
 type User{
     id: ID!
     name: String!
-    bio: String!
-    avatar: String!
+    email: String!
+    bio: String
+    avatar: String
+    playlist: Playlist!
 }
 
 type Song{

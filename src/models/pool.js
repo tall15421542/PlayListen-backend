@@ -41,13 +41,14 @@ pool.prototype.getData = function(query){
 pool.prototype.applyQuery = function(query){
     return new Promise((resolve, reject) => {
         try {
-            this.pool.getConnection((err, conn)=>{
-                conn.query(query, (eror, results) => {
+            this.pool.getConnection((error, conn)=>{
+                conn.query(query, (error, result) => {
                     console.log(query)
-                    if(err) throw err 
+                    if(error) throw error 
                     console.log("success")
+                    console.log(result)
                     conn.release()
-                    resolve(results)
+                    resolve(result)
                 })
             })
         } catch (error) {

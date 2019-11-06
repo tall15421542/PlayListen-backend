@@ -1,12 +1,33 @@
 import { GraphQLScalarType } from 'graphql'
 import { Kind } from 'graphql/language'
+import jwt from 'jsonwebtoken' 
+
+const createToken = ({ id, name }) => jwt.sign({ id, name }, process.env.TOKEN_SECRET, {
+  expiresIn: '1d'
+});
 
 function user_database_to_graphql(user_database){
+    var result, token, user
+    console.log(user_database)
+    if(user_database){
+        result = 'success'
+        user = {
+            id: user_database.userId,
+            name: user_database.userName,
+            bio: user_database.bio,
+            avatar: user_database.avatar,
+            email: user_database.email
+        }
+        console.log(user)
+        token = createToken(user);
+    }else{
+        result = 'failed'
+    }
+
     return{
-        id: user_database.userId,
-        name: user_database.userName,
-        bio: user_database.bio,
-        avatar: user_database.avatar,
+        user: user,
+        token: token,
+        result: result
     }
 }
 
@@ -71,9 +92,37 @@ export default{
         },
 
         createUser: async(parent, {data}, {model}) => {
-            const user = await model.user.create(data)
-            return user_database_to_graphql(user)
+            const exist = await model.user.exist(data)
+            if(!exist){
+                const user = await model.user.create(data)
+                return user_database_to_graphql(user)
+            }
+            return{
+                user: null,
+                token: null,
+                result: 'duplicate'
+            }
+        },
+
+        signIn: async(parent, {data}, {model}) => {
+            const user = await model.user.getByName(data.userName)
+            if(user && user.password === data.password){
+                return user_database_to_graphql(user)
+            }
+            if(user && user.password !== data.password){
+                return{
+                    user: null, 
+                    token: null,
+                    result: 'password_fail'
+                }
+            }
+            return{
+                user: null,
+                token: null,
+                result: 'not_exist'
+            }
         }
+
     },
 
     Playlist: {
