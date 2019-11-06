@@ -12,6 +12,7 @@ type Mutation{
     createPlaylist(data: CreatePlaylistInput!): Playlist!
     createUser(data: CreateUserInput): CreateUserPayload!
     signIn(data: SignInInput): SignInPayload!
+    updatePlaylist(data: UpdatePlaylistInput!): Playlist!
 }
 
 type SignInPayload{
@@ -24,6 +25,12 @@ type CreateUserPayload{
     user: User 
     token: String 
     result: String!
+}
+
+input UpdatePlaylistInput{
+    oldId: String!
+    listInfo: CreatePlaylistInput!
+    createdAt: String!
 }
 
 input SignInInput{

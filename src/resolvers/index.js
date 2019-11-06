@@ -7,6 +7,15 @@ const createToken = ({ id, name }) => jwt.sign({ id, name }, process.env.TOKEN_S
 });
 
 function user_database_to_graphql(user_database){
+    return {
+        id: user_database.userId,
+        name: user_database.userName,
+        bio: user_database.bio,
+        avatar: user_database.avatar,
+        email: user_database.email
+    }
+}
+function user_database_to_autentication_result(user_database){
     var result, token, user
     console.log(user_database)
     if(user_database){
@@ -95,7 +104,7 @@ export default{
             const exist = await model.user.exist(data)
             if(!exist){
                 const user = await model.user.create(data)
-                return user_database_to_graphql(user)
+                return user_database_to_autentication_result(user)
             }
             return{
                 user: null,
@@ -104,10 +113,15 @@ export default{
             }
         },
 
+        updatePlaylist: async(parent, {data}, {model}) => {
+            const list = await model.songList.update(data)
+            return songList_database_to_graphql(list)
+        },
+
         signIn: async(parent, {data}, {model}) => {
             const user = await model.user.getByName(data.userName)
             if(user && user.password === data.password){
-                return user_database_to_graphql(user)
+                return user_database_to_autentication_result(user)
             }
             if(user && user.password !== data.password){
                 return{

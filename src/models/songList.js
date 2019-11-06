@@ -27,6 +27,21 @@ songlist.prototype.create = async function(CreateSonglistInput, sourceType){
     return insertId
 }
 
+songlist.prototype.delete = async function(id){
+    const sql = 'DELETE FROM List WHERE listId = ?'
+    const insert = [id]
+    const query = mysql.format(sql, insert)
+    var result = await this.conn.applyQuery(query)
+    return result
+}
+
+songlist.prototype.update = async function(UpdatePlaylistInput){
+    this.delete(UpdatePlaylistInput.oldId)
+    var playlist = UpdatePlaylistInput.listInfo;
+    playlist.createdAt = UpdatePlaylistInput.createdAt
+    var insertId = await this.create(playlist, "youtube")
+    return await this.getById(insertId)
+}
 
 
 // Helper method
