@@ -26,6 +26,14 @@ song.prototype.getMultipleInstance = async function(listId){
     return result
 }
 
+song.prototype.getByUser = async function (userId){
+    const sql = 'SELECT s.* FROM Song s INNER JOIN List l on s.listId = l.listId where l.userId = ?'
+    const insert = [userId]
+    const query = mysql.format(sql, insert)
+    const songs = await this.conn.getData(query)
+    return songs;
+}
+
 // Helper func
 function CreateSongInput_to_DatabaseSchema(listId, CreateSongInput){
     return [

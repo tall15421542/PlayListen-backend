@@ -75,6 +75,21 @@ function songs_to_graphql(songs){
     return ret 
 }
 
+function userList_database_to_graphql(userList_database){
+    var ret = [];
+    for(var listIdx = 0 ; listIdx < userList_database.length ; ++listIdx){
+        var list = userList_database[listIdx];
+        var retList = songList_database_to_graphql(list)
+        retList.songs = []
+        for(var songIdx = 0 ; songIdx < list.songs.length ; ++songIdx){
+            retList.songs.push(song_database_to_graphql(list.songs[songIdx]))
+        }
+        ret.push(retList)
+    }
+    console.log(ret)
+    return ret 
+}
+
 export default{
     Query: {
         user: async(parent, {userId}, {model}) =>{
@@ -141,12 +156,24 @@ export default{
 
     Playlist: {
         songs: async (playlist, args, { model} ) => {
+            if(playlist.songs){
+                console.log("I have")
+                console.log(playlist.songs)
+                return playlist.songs
+            }
             const result = await model.song.getMultipleInstance(playlist.id)
             return songs_to_graphql(result)
         },
         owner: async(playlist, args, {model} ) => {
             const result = await model.user.getById(playlist.ownerId)
             return user_database_to_graphql(result)
+        }
+    },
+
+    User: {
+        playlists: async(user, args, {model}) => {
+            const userList = await model.songList.getByUser(user.id);
+            return userList_database_to_graphql(userList);
         }
     },
 

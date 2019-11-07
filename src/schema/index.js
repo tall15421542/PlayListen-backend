@@ -77,7 +77,7 @@ type User{
     email: String!
     bio: String
     avatar: String
-    playlist: Playlist!
+    playlists: [Playlist!]
 }
 
 type Song{

@@ -43,6 +43,15 @@ songlist.prototype.update = async function(UpdatePlaylistInput){
     return await this.getById(insertId)
 }
 
+songlist.prototype.getByUser = async function(userId){
+    const sql = 'SELECT * From List l where l.userId = ?'
+    const insert = [userId]
+    const query = mysql.format(sql, insert)
+    const lists = await this.conn.getData(query)
+    const songs = await this.songModel.getByUser(userId)
+    const userList = merge_songlist(lists, songs)
+    return userList;
+}
 
 // Helper method
 function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
@@ -52,6 +61,22 @@ function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
         listDes: CreateSonglistInput.des,
         listCover: CreateSonglistInput.cover,
     }
+}
+
+function merge_songlist(lists, songs){
+    var cur_songsIdx = 0;
+    for(var listIdx = 0 ; listIdx < lists.length ; ++listIdx){
+        lists[listIdx].songs = []
+        for(var songsIdx = cur_songsIdx ; songsIdx < songs.length ; ++songsIdx){
+            if(songs[songsIdx].listId === lists[listIdx].listId){
+                lists[listIdx].songs.push(songs[songsIdx])
+                continue 
+            }
+            break 
+        } 
+        cur_songsIdx = songsIdx 
+    }
+    return lists
 }
 
 export default songlist
