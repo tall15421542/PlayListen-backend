@@ -13,6 +13,7 @@ type Mutation{
     createUser(data: CreateUserInput): CreateUserPayload!
     signIn(data: SignInInput): SignInPayload!
     updatePlaylist(data: UpdatePlaylistInput!): Playlist!
+    deletePlaylist(data: DeletePlaylistInput!): DeletePlaylistPayload!
 }
 
 type SignInPayload{
@@ -21,10 +22,18 @@ type SignInPayload{
     result: String!
 }
 
+type DeletePlaylistPayload{
+    listId: Int!
+}
+
 type CreateUserPayload{
     user: User 
     token: String 
     result: String!
+}
+
+input DeletePlaylistInput{
+    listId: Int!
 }
 
 input UpdatePlaylistInput{

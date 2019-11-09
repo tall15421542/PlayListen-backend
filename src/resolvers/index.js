@@ -150,6 +150,11 @@ export default{
                 token: null,
                 result: 'not_exist'
             }
+        },
+
+        deletePlaylist: async(parent, {data}, {model}) => {
+            model.songList.delete(data.listId)
+            return { listId: data.listId }
         }
 
     },

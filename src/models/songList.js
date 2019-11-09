@@ -28,7 +28,7 @@ songlist.prototype.create = async function(CreateSonglistInput, sourceType){
 }
 
 songlist.prototype.delete = async function(id){
-    const sql = 'DELETE FROM List WHERE listId = ?'
+    const sql = 'DELETE s.*, l.* FROM Song s LEFT JOIN List l ON s.listId = l.listId  WHERE s.listId = ?'
     const insert = [id]
     const query = mysql.format(sql, insert)
     var result = await this.conn.applyQuery(query)
