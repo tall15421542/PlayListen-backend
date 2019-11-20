@@ -9,9 +9,7 @@ function pool(){
         database: process.env.DB_DATABASE,
         password: process.env.DB_PASS,
         ssl: {
-            ca: fs.readFileSync(__dirname + '/ssl/server-ca.pem'),
-            cert: fs.readFileSync(__dirname + '/ssl/client-cert.pem'),
-            key: fs.readFileSync(__dirname + '/ssl/client-key.pem')
+            ca: fs.readFileSync(__dirname + '/ssl/rds-ca-2015-root.pem'),
         }
     })
 }
