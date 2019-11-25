@@ -1,4 +1,6 @@
 import mysql from 'mysql'
+const shortid = require('shortid')
+
 // Construct func
 function songlist(conn, songModel){
     this.conn = conn;
@@ -19,11 +21,12 @@ songlist.prototype.getById = async function(listId){
 
 songlist.prototype.create = async function(CreateSonglistInput, sourceType){
     const sql = 'INSERT INTO List SET ?'
+    CreateSonglistInput.listId = shortid.generate()
     const insert = [CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput)]
     const query = mysql.format(sql, insert)
     var result = await this.conn.applyQuery(query) // Promise 
     var insertId = result.insertId
-    result = await this.songModel.createMultipleInstance(insertId, CreateSonglistInput.songs, sourceType) // Promise
+    result = await this.songModel.createMultipleInstance(CreateSonglistInput.listId, CreateSonglistInput.songs, sourceType) // Promise
     return insertId
 }
 
@@ -60,6 +63,7 @@ function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
         listName: CreateSonglistInput.name,
         listDes: CreateSonglistInput.des,
         listCover: CreateSonglistInput.cover,
+        listId: CreateSonglistInput.listId,
     }
 }
 
