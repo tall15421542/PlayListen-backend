@@ -27,7 +27,7 @@ songlist.prototype.create = async function(CreateSonglistInput, sourceType){
     var result = await this.conn.applyQuery(query) // Promise 
     var insertId = result.insertId
     result = await this.songModel.createMultipleInstance(CreateSonglistInput.listId, CreateSonglistInput.songs, sourceType) // Promise
-    return insertId
+    return CreateSonglistInput.listId
 }
 
 songlist.prototype.delete = async function(id){
