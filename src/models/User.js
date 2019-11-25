@@ -1,4 +1,6 @@
 import mysql from 'mysql'
+const uuid = require('uuid/v1')
+
 // Construct func
 function User(conn){
     this.conn = conn 
@@ -15,10 +17,11 @@ User.prototype.getById = async function(id){
 
 User.prototype.create = async function(CreateUserInput){
     const sql = 'INSERT INTO User SET ?';
+    CreateUserInput.userId = uuid();
     const insert = CreateUserInput;
     const query = mysql.format(sql, insert);
     const result = await this.conn.applyQuery(query); // Promise
-    return await this.getById(result.insertId)
+    return await this.getById(CreateUserInput.userId)
 }
 
 User.prototype.exist = async function(user){
