@@ -23,7 +23,7 @@ type SignInPayload{
 }
 
 type DeletePlaylistPayload{
-    listId: Int!
+    listId: ID!
 }
 
 type CreateUserPayload{
@@ -33,7 +33,7 @@ type CreateUserPayload{
 }
 
 input DeletePlaylistInput{
-    listId: Int!
+    listId: ID!
 }
 
 input UpdatePlaylistInput{
