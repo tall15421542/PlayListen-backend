@@ -105,6 +105,15 @@ export default{
         searchResult: async(parent, {query}, {model}) => {
             const result = await model.search.youtube.getURLInfoArray(query)
             return songs_to_graphql(result)
+        },
+
+        exploreList: async(parent, {num}, {model}) => {
+            const result = await model.songList.getExploreList(num);
+            var ret = []
+            for(var i = 0 ; i < result.length ; ++i){
+                ret.push(songList_database_to_graphql(result[i]))
+            }
+            return ret;
         }
     },
 

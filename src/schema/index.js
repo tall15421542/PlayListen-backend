@@ -6,6 +6,7 @@ type Query{
     searchResult(query: String!): [Song!]
     playlist(listId: String!): Playlist
     user(userId: String!): User
+    exploreList(num: Int!): [Playlist]
 }
 
 type Mutation{

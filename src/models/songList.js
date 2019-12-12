@@ -56,6 +56,16 @@ songlist.prototype.getByUser = async function(userId){
     return userList;
 }
 
+songlist.prototype.getExploreList = async function(num){
+    return await this.getRandom(num);
+}
+
+songlist.prototype.getRandom = async function(num){
+    const query = `SELECT * FROM List ORDER BY RAND() LIMIT ${num}`;
+    const lists = await this.conn.getData(query);
+    return lists;
+}
+
 // Helper method
 function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
     return {
