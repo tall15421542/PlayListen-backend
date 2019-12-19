@@ -21,9 +21,10 @@ Youtube.prototype.getPlayListInfo = async function(playlistId) {
         songlistInfo.push({
             songName: song.snippet.title,
             sourceId: song.snippet.resourceId.videoId,
-            songCover: getCoverImage(song.snippet.videoId),
+            songCover: getCoverImage(song.snippet.resourceId.videoId),
             duration: "not support yet",
         });
+        console.log(getCoverImage(song.snippet.resourceId.videoId))
     });
     return songlistInfo;
 }

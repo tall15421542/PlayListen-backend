@@ -8,6 +8,7 @@ function pool(){
         user: process.env.DB_USER,
         database: process.env.DB_DATABASE,
         password: process.env.DB_PASS,
+        charset : 'utf8mb4',
         ssl: {
             ca: fs.readFileSync(__dirname + '/ssl/rds-ca-2015-root.pem'),
         }
