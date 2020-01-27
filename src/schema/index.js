@@ -7,6 +7,7 @@ type Query{
     playlist(listId: String!): Playlist
     user(userId: String!): User
     exploreList(num: Int!): [Playlist]
+    search(data: SearchInput!): SearchPayload!
 }
 
 type Mutation{
@@ -15,8 +16,42 @@ type Mutation{
     signIn(data: SignInInput): SignInPayload!
     updatePlaylist(data: UpdatePlaylistInput!): Playlist!
     deletePlaylist(data: DeletePlaylistInput!): DeletePlaylistPayload!
+    saveList(data: SaveListInput!): SaveListPayload!
+    follow(data: FollowInput!): FollowPayload!
 }
 
+input SearchInput{
+  prefix: String!
+  limit: Int!
+}
+
+type SearchPayload{
+  result: [SearchItem]
+}
+
+type SearchItem{
+  type: Int!
+  playlist: Playlist
+  user: User
+}
+
+input SaveListInput{
+  userId: String!
+  listId: String!
+}
+
+type SaveListPayload{
+  savedList: Playlist
+}
+
+input FollowInput{
+  followerId: String!
+  followingId: String!
+}
+
+type FollowPayload{
+  following: User!
+}
 type SignInPayload{
     user: User 
     token: String 
@@ -88,6 +123,8 @@ type User{
     bio: String
     avatar: String
     playlists: [Playlist!]
+    savedList: [Playlist]
+    followList: [User]
 }
 
 type Song{
