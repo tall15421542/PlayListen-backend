@@ -123,8 +123,8 @@ type User{
     bio: String
     avatar: String
     playlists: [Playlist!]
-    savedList: [Playlist]
-    followList: [User]
+    savedLists: [Playlist]
+    followingList: [User]
 }
 
 type Song{
