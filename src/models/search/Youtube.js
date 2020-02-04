@@ -108,7 +108,7 @@ function urlToId(url) {
 }
 
 function getCoverImage(id) {
-    let url = 'https://img.youtube.com/vi/' + id + '/sddefault.jpg';
+    let url = 'https://img.youtube.com/vi/' + id + '/0.jpg';
     return url;
 }
 
