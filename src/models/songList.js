@@ -72,13 +72,22 @@ songlist.prototype.getRandom = async function(num){
 
 // Helper method
 function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
+    if(CreateSonglistInput.createdAt){
+      return {
+          userId: CreateSonglistInput.ownerId,
+          listName: CreateSonglistInput.name,
+          listDes: CreateSonglistInput.des,
+          listCover: CreateSonglistInput.cover,
+          listId: CreateSonglistInput.listId,
+          createdAt: CreateSonglistInput.createdAt,
+      }
+    }
     return {
         userId: CreateSonglistInput.ownerId,
         listName: CreateSonglistInput.name,
         listDes: CreateSonglistInput.des,
         listCover: CreateSonglistInput.cover,
         listId: CreateSonglistInput.listId,
-        createdAt: CreateSonglistInput.createdAt,
     }
 }
 
