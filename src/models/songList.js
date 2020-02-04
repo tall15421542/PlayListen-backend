@@ -20,8 +20,10 @@ songlist.prototype.getById = async function(listId){
 }
 
 songlist.prototype.create = async function(CreateSonglistInput, sourceType){
+    console.log(CreateSonglistInput)
     const sql = 'INSERT INTO List SET ?'
-    CreateSonglistInput.listId = shortid.generate()
+    if(!CreateSonglistInput.listId)
+      CreateSonglistInput.listId = shortid.generate()
     const insert = [CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput)]
     const query = mysql.format(sql, insert)
     var result = await this.conn.applyQuery(query) // Promise 
@@ -39,9 +41,11 @@ songlist.prototype.delete = async function(id){
 }
 
 songlist.prototype.update = async function(UpdatePlaylistInput){
+    console.log(UpdatePlaylistInput)
     this.delete(UpdatePlaylistInput.oldId)
     var playlist = UpdatePlaylistInput.listInfo;
     playlist.createdAt = UpdatePlaylistInput.createdAt
+    playlist.listId = UpdatePlaylistInput.oldId
     var insertId = await this.create(playlist, "youtube")
     return await this.getById(insertId)
 }
@@ -74,6 +78,7 @@ function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
         listDes: CreateSonglistInput.des,
         listCover: CreateSonglistInput.cover,
         listId: CreateSonglistInput.listId,
+        createdAt: CreateSonglistInput.createdAt,
     }
 }
 
