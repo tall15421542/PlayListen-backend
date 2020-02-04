@@ -3,8 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import {ApolloServer, gql} from 'apollo-server-express';
 import db from './models/index'
-import schema from './schema/index'
-import resolvers from './resolvers/index'
+import { schema, resolvers } from './schema/index'
 import jwt from 'jsonwebtoken'
 import session from 'express-session'
 import { Auth } from './auth/index'

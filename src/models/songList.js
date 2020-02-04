@@ -94,3 +94,57 @@ function merge_songlist(lists, songs){
 }
 
 export default songlist
+
+// helper
+
+
+export function songList_database_to_graphql(list_database){
+    return{
+        id: list_database.listId,
+        ownerId: list_database.userId,
+        name: list_database.listName,
+        des: list_database.listDes,
+        cover: list_database.listCover,
+        createdAt: list_database.createdAt,
+        updatedAt: list_database.updatedAt,
+    }
+}
+
+export function userList_database_to_graphql(userList_database){
+    var ret = [];
+    for(var listIdx = 0 ; listIdx < userList_database.length ; ++listIdx){
+        var list = userList_database[listIdx];
+        var retList = songList_database_to_graphql(list)
+        retList.songs = []
+        for(var songIdx = 0 ; songIdx < list.songs.length ; ++songIdx){
+            retList.songs.push(song_database_to_graphql(list.songs[songIdx]))
+        }
+        ret.push(retList)
+    }
+    console.log(ret)
+    return ret 
+}
+
+function song_database_to_graphql(song_database){
+    return{
+        id: song_database.songId,
+        listId: song_database.listId,
+        sourceId: song_database.sourceId,
+        name: song_database.songName,
+        cover: song_database.songCover,
+        duration: song_database.duration 
+    }
+}
+
+export function songs_to_graphql(songs){
+    var ret = []
+    const resultNum = songs.length 
+    for(var i = 0 ; i < resultNum ; ++i){
+        if(!songs[i].listId){
+            songs[i].songId = songs[i].listId = -1
+        }
+        ret.push(song_database_to_graphql(songs[i]))
+    }
+    return ret 
+}
+

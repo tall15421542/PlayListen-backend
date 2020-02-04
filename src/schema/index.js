@@ -1,144 +1,44 @@
 import { gql } from 'apollo-server-express'
+import * as User from './user'
+import * as Playlist from './playlist'
+import * as Search from './search'
+import * as Song from './song'
+import * as _Date from './date'
+import { makeExecutableSchema } from 'graphql-tools';
+import { merge } from 'lodash'
 
-const schema = gql`
-scalar Date
+const _typedefs = []
+const _queries = []
+const _mutations = []
+const _mutationInputs = []
+const _mutationPayloads = []
+
+const schemas = [User, Playlist, Search, Song, _Date]
+var resolvers = {};
+schemas.forEach((s) => {
+  _typedefs.push(s.typedef)
+  _queries.push(s.query)
+  _mutations.push(s.mutation)
+  _mutationInputs.push(s.mutationInput)
+  _mutationPayloads.push(s.mutationPayload)
+  resolvers = merge(resolvers, s.resolvers)
+})
+
+const schema =gql`
+${_typedefs.join('\n')}
+
 type Query{
-    searchResult(query: String!): [Song!]
-    playlist(listId: String!): Playlist
-    user(userId: String!): User
-    exploreList(num: Int!): [Playlist]
-    search(data: SearchInput!): SearchPayload!
+  ${_queries.join('\n')}
 }
 
 type Mutation{
-    createPlaylist(data: CreatePlaylistInput!): Playlist!
-    createUser(data: CreateUserInput): CreateUserPayload!
-    signIn(data: SignInInput): SignInPayload!
-    updatePlaylist(data: UpdatePlaylistInput!): Playlist!
-    deletePlaylist(data: DeletePlaylistInput!): DeletePlaylistPayload!
-    saveList(data: SaveListInput!): SaveListPayload!
-    follow(data: FollowInput!): FollowPayload!
+  ${_mutations.join('\n')}
 }
 
-input SearchInput{
-  prefix: String!
-  limit: Int!
-}
-
-type SearchPayload{
-  result: [SearchItem]
-}
-
-type SearchItem{
-  type: Int!
-  playlist: Playlist
-  user: User
-}
-
-input SaveListInput{
-  userId: String!
-  listId: String!
-}
-
-type SaveListPayload{
-  savedList: Playlist
-}
-
-input FollowInput{
-  followerId: String!
-  followingId: String!
-}
-
-type FollowPayload{
-  following: User!
-}
-type SignInPayload{
-    user: User 
-    token: String 
-    result: String!
-}
-
-type DeletePlaylistPayload{
-    listId: ID!
-}
-
-type CreateUserPayload{
-    user: User 
-    token: String 
-    result: String!
-}
-
-input DeletePlaylistInput{
-    listId: ID!
-}
-
-input UpdatePlaylistInput{
-    oldId: String!
-    listInfo: CreatePlaylistInput!
-    createdAt: String!
-}
-
-input SignInInput{
-    userName: String!
-    password: String!
-}
-
-input CreatePlaylistInput{
-    name: String!
-    ownerId: String!
-    des: String
-    cover: String
-    songs: [CreateSongInput!]
-}
-
-input CreateUserInput{
-    userName: String!
-    email: String!
-    password: String!
-}
-
-
-input CreateSongInput{
-    sourceId: String!
-    name: String!
-    cover: String!
-    duration: String!
-}
-
-type Playlist{
-    id: ID!
-    owner: User!
-    name: String!
-    des: String!
-    cover: String!
-    createdAt: Date!
-    updatedAt: Date!
-    songs: [Song!]!
-}
-
-type User{
-    id: ID!
-    name: String!
-    email: String!
-    bio: String
-    avatar: String
-    playlists: [Playlist!]
-    savedLists: [Playlist]
-    followingList: [User]
-    googleId: String
-    googleAccessToken: String
-    facebookId: String
-    facebookAccessToken: String
-}
-
-type Song{
-    id: ID!
-    listId: String!
-    sourceId: String!
-    name: String!
-    cover: String!
-    duration: String!
-}
+${_mutationInputs.join('\n')}
+${_mutationPayloads.join('\n')}
 `
 
-export default schema
+console.log(resolvers)
+export { schema, resolvers }
+
