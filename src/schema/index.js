@@ -125,6 +125,10 @@ type User{
     playlists: [Playlist!]
     savedLists: [Playlist]
     followingList: [User]
+    googleId: String
+    googleAccessToken: String
+    facebookId: String
+    facebookAccessToken: String
 }
 
 type Song{
