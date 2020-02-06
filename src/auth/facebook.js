@@ -37,7 +37,6 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.serializeUser((user, done) => {
-  console.log(user)
   done(null, user.id);
 });
 

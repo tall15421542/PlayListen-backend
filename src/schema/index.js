@@ -1,8 +1,8 @@
 import { gql } from 'apollo-server-express'
-import * as User from './user'
-import * as Playlist from './playlist'
-import * as Search from './search'
-import * as Song from './song'
+import * as User from './user/index'
+import * as Playlist from './playlist/index'
+import * as Search from './search/index'
+import * as Song from './song/index'
 import * as _Date from './date'
 import { makeExecutableSchema } from 'graphql-tools';
 import { merge } from 'lodash'
@@ -15,6 +15,7 @@ const _mutationPayloads = []
 
 const schemas = [User, Playlist, Search, Song, _Date]
 var resolvers = {};
+
 schemas.forEach((s) => {
   _typedefs.push(s.typedef)
   _queries.push(s.query)
@@ -38,7 +39,5 @@ type Mutation{
 ${_mutationInputs.join('\n')}
 ${_mutationPayloads.join('\n')}
 `
-
-console.log(resolvers)
 export { schema, resolvers }
 

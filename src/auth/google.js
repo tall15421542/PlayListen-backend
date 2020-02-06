@@ -18,7 +18,6 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   },
   async function(req, accessToken, refreshToken, profile, done) {
-    console.log(refreshToken)
     var user = await getLoginUser(req);
     // login
     if(user){
@@ -28,7 +27,6 @@ passport.use(new GoogleStrategy({
     // not log in
     else{
       const user = await model.user.getByGoogleId(profile.id)
-      console.log(user)
       if(user){
         return done(null, user_database_to_graphql(user));
       }
@@ -59,7 +57,6 @@ router.get('/', passport.authenticate('google', {
 router.get('/callback',
   passport.authenticate('google', { failureRedirect: 'Unauthorized'}),
   function(req, res) {
-    console.log(req.user)
     req.session.user = req.user
     req.session.token = createToken(req.user)
     req.session.result = 'success'

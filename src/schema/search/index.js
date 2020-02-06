@@ -1,4 +1,4 @@
-import { songs_to_graphql } from '../models/songList'
+import { songs_to_graphql } from '../../models/songList'
 export const typedef = `
   type SearchItem{
     type: Int!

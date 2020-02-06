@@ -26,3 +26,5 @@ export const mutationInput = `
 
 export const mutationPayload=`
 `
+
+export const resolvers = {}
