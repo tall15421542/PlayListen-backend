@@ -23,7 +23,7 @@ app.use(bodyParser.json())
 app.use(session({
   secret: 'secret',
     saveUninitialized: true,
-    resave: true
+    resave: false
 }));
 
 app.use('/auth', Auth);

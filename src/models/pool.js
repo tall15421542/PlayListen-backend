@@ -19,13 +19,13 @@ function pool(){
 pool.prototype.getData = function(query){
   return new Promise((resolve, reject) => {
     try {
+      console.log(query)
       this.pool.getConnection((err, conn)=>{
         if(err) throw err
         conn.query(query, (error, result) => {
           if (error) {
             throw error
           }
-          console.log(query)
           console.log('success')
           conn.release()
           resolve(result)
@@ -40,9 +40,9 @@ pool.prototype.getData = function(query){
 pool.prototype.applyQuery = function(query){
   return new Promise((resolve, reject) => {
     try {
+      console.log(query)
       this.pool.getConnection((error, conn)=>{
         conn.query(query, (error, result) => {
-          console.log(query)
           if(error) throw error 
           console.log("success")
           console.log(result)

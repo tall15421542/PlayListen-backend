@@ -14,57 +14,44 @@ passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL, 
-    passReqToCallback: true
+    passReqToCallback: true,
+    profileFields: ['id', 'emails', 'name'] 
   },
   async function(req, accessToken, refreshToken, profile, done) {
-    var user = await getLoginUser(req);
-    // login
-    if(user){
-      await model.user.connectFacebook(user.id, {accessToken: accessToken, id: profile.id}); 
-      return done(null, user);
-    }
-    // not log in
-    else{
-      const user = await model.user.getByFacebookId(profile.id)
-      if(user){
-        return done(null, user_database_to_graphql(user));
+    const user = await model.user.getByFacebookId(profile.id)
+    if(user) return done(null, user_database_to_authentication_result(user))
+    return done(null, {
+      result: 'facebookSignUp',
+      token: null,
+      user: {
+        facebookAccessToken: accessToken,
+        facebookId: profile.id,
+        email: profile.emails[0].value
       }
-      else{
-        return done(null, null);
-      }
-    }
+    })
   }
 ));
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async (id, done) => {
-  const user = await model.user.getById(id);
-  done(null, user_database_to_graphql(user));
+passport.deserializeUser(async (user, done) => {
+  console.log("deserial")
+  done(null, user);
 });
 
 router.get('/', passport.authenticate('facebook', { 
-  scope: [],
+  scope: ['email'],
   accessType: 'offline',
   prompt: 'consent',
 }));
 
 router.get('/callback',
-  passport.authenticate('facebook', { failureRedirect: 'Unauthorized'}),
+  passport.authenticate('facebook', { failureRedirect: process.env.FACEBOOK_FAIL_REDIRECT_URL}),
   function(req, res) {
-    req.session.user = req.user
-    req.session.token = createToken(req.user)
-    req.session.result = 'success'
-    res.json(req.session)
+    req.session.authResult = req.user
+    res.redirect(process.env.FACEBOOK_SUCCESS_REDIRECT_URL)
   });
-
-router.get('/Unauthorized', function(req, res){
-  req.session.user = null
-  req.session.token = null
-  req.session.result = 'failed'
-  res.json(req.session) 
-})
 
 export { router as Facebook }

@@ -5,7 +5,7 @@ import axios from 'axios'
 
 export const createToken = ({ id, name }) => {
   if(!id || !name) return null
-  jwt.sign({ id, name }, process.env.TOKEN_SECRET, {
+  return jwt.sign({ id, name }, process.env.TOKEN_SECRET, {
     expiresIn: '1d'
   })
 };

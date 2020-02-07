@@ -38,12 +38,12 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async (id, done) => {
-  const user = await model.user.getById(id);
-  done(null, user_database_to_graphql(user));
+passport.deserializeUser(async (user, done) => {
+  // const user = await model.user.getById(id);
+  done(null, user);
 });
 
 router.get('/', passport.authenticate('google', { 
