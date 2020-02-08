@@ -54,4 +54,12 @@ router.get('/callback',
     res.redirect(process.env.FACEBOOK_SUCCESS_REDIRECT_URL)
   });
 
+router.get('/user', (req, res) => {
+  if (req.session && req.session.authResult) {
+    res.json(req.session.authResult);
+  } else {
+    res.json({ result: 'failed' });
+  }
+});
+
 export { router as Facebook }

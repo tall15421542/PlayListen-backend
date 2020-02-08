@@ -15,7 +15,7 @@ var model = new db()
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'public')))
 // parse application/x-www-form-urlencoded
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
