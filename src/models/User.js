@@ -72,6 +72,17 @@ User.prototype.getById = async function(id){
   return result[0]
 }
 
+User.prototype.getByIds = async function(ids){
+  var sql = `SELECT * FROM User Where `
+  for(var i = 0 ; i < ids.length ; ++i){
+    sql += `userId = ?`
+    if(i != ids.length - 1) sql += ` OR `
+  }
+  const query = mysql.format(sql, ids)
+  const result = await this.conn.getData(query)
+  return result;
+}
+
 User.prototype.create = async function(CreateUserInput){
   const sql = 'INSERT INTO User SET ?';
   CreateUserInput.userId = shortid.generate();
@@ -82,11 +93,11 @@ User.prototype.create = async function(CreateUserInput){
 }
 
 User.prototype.exist = async function(user){
-  const sql = 'SELECT 1 FROM User WHERE (userName = ? and email = ?)'
-  const insert = [user.userName, user.email]
+  const sql = 'SELECT 1 FROM User WHERE (userName = ? or email = ? or facebookId = ?)'
+  const insert = [user.userName, user.email, user.facebookId]
   const query = mysql.format(sql, insert);
   const result = await this.conn.applyQuery(query)
-  return result.length === 1
+  return result.length !== 0
 }
 
 User.prototype.getByName = async function(name){
