@@ -1,0 +1,36 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+User	models/User.js	/^User.prototype.getById = async function(id){$/;"	c
+User.exist	models/User.js	/^User.prototype.exist = async function(user){$/;"	m
+User.getById	models/User.js	/^User.prototype.getById = async function(id){$/;"	m
+Youtube	models/search/Youtube.js	/^Youtube.prototype.getPlayListInfo = async function(playlistId) {$/;"	c
+Youtube.getPlayListInfo	models/search/Youtube.js	/^Youtube.prototype.getPlayListInfo = async function(playlistId) {$/;"	m
+Youtube.getSingleURLInfo	models/search/Youtube.js	/^Youtube.prototype.getSingleURLInfo = async function(URL) {$/;"	m
+Youtube.getURLInfoArray	models/search/Youtube.js	/^Youtube.prototype.getURLInfoArray = async function(URL) {$/;"	m
+Youtube.setDuration	models/search/Youtube.js	/^Youtube.prototype.setDuration = async function(songs){$/;"	m
+function.CreateSongInput_to_DatabaseSchema	models/song.js	/^function CreateSongInput_to_DatabaseSchema(listId, CreateSongInput){$/;"	f
+function.getCoverImage	models/search/Youtube.js	/^function getCoverImage(id) {$/;"	f
+function.idToUrl	models/search/Youtube.js	/^function idToUrl(ytId){$/;"	f
+function.urlToId	models/search/Youtube.js	/^function urlToId(url) {$/;"	f
+pool	models/pool.js	/^pool.prototype.getData = function(query){$/;"	c
+pool.applyQuery	models/pool.js	/^pool.prototype.applyQuery = function(query){$/;"	m
+pool.getData	models/pool.js	/^pool.prototype.getData = function(query){$/;"	m
+song	models/song.js	/^song.prototype.createMultipleInstance = async function(listId, songs, sourceType){$/;"	c
+song.createMultipleInstance	models/song.js	/^song.prototype.createMultipleInstance = async function(listId, songs, sourceType){$/;"	m
+song.getMultipleInstance	models/song.js	/^song.prototype.getMultipleInstance = async function(listId){$/;"	m
+songList_database_to_graphql	resolvers/index.js	/^function songList_database_to_graphql(list_database){$/;"	f
+song_database_to_graphql	resolvers/index.js	/^function song_database_to_graphql(song_database){$/;"	f
+songlist	models/songList.js	/^songlist.prototype.getById = async function(listId){$/;"	c
+songlist.function.CreateSonglistInput_to_DatabaseSchema	models/songList.js	/^function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){$/;"	f
+songlist.getById	models/songList.js	/^songlist.prototype.getById = async function(listId){$/;"	m
+songlist.songlist	models/songList.js	/^songlist.prototype.getByUser = async function(userId){$/;"	c
+songlist.songlist.getExploreList	models/songList.js	/^songlist.prototype.getExploreList = async function(num){$/;"	m
+songlist.songlist.getRandom	models/songList.js	/^songlist.prototype.getRandom = async function(num){$/;"	m
+songs_to_graphql	resolvers/index.js	/^function songs_to_graphql(songs){$/;"	f
+songs_to_graphql.userList_database_to_graphql	resolvers/index.js	/^function userList_database_to_graphql(userList_database){$/;"	f
+user_database_to_autentication_result	resolvers/index.js	/^function user_database_to_autentication_result(user_database){$/;"	f
+user_database_to_graphql	resolvers/index.js	/^function user_database_to_graphql(user_database){$/;"	f
