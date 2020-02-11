@@ -7,7 +7,13 @@ var router = express.Router();
 router.use('/google', Google);
 router.use('/facebook', Facebook);
 router.use('/signOut', function(req, res){
-  req.logout()
+  if(req.logout){
+    req.logout()
+  }
+  if(req.session && req.session.authResult){
+    delete req.session.authResult
+  }
+  console.log(req.session)
   res.redirect(process.env.SIGNOUT_REDIRECT_URL)
 })
 
