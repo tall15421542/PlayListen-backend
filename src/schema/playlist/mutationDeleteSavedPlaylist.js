@@ -12,7 +12,7 @@ export const inputTypeDef = `
 
 export const payloadTypeDef = `
   type DeleteSavedPlaylistPayload{
-    savedList: [Playlist!]
+    success: Boolean
   }
 `
 
@@ -20,11 +20,7 @@ export const resolver = {
   Mutation: {
     deleteSavedPlaylist: async(parent, {data}, {model}) =>{
       await model.savedPlaylist.delete(data)
-      const listIds = await model.savedPlaylist.getListIdsByUserId(data.userId)
-      console.log(listIds)
-      const lists = await listByIdLoader.loadMany(listIds)
-      const savedList = lists.map(list => songList_database_to_graphql(list))
-      return { savedList }
+      return { success: true }
     }
   }
 }

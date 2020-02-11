@@ -13,6 +13,14 @@ savedPlaylist.prototype.create = async function(savePlaylistInput){
   return result
 }
 
+savedPlaylist.prototype.getByUserId = async function(userId){
+  const sql = `SELECT * from SavedPlaylist where userId = ? ORDER BY savedAt DESC`
+  const insert = [userId]
+  const query = mysql.format(sql, insert)
+  const savedLists = await this.conn.getData(query)
+  return savedLists;
+}
+
 savedPlaylist.prototype.getListIdsByUserId = async function(userId){
   const sql = `SELECT listId from SavedPlaylist where userId = ? ORDER BY savedAt DESC`
   const insert = [userId]

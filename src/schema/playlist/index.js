@@ -1,4 +1,5 @@
 import * as typePlaylist from './typePlaylist'
+import * as typeSavedPlaylist from './typeSavedPlaylist'
 import * as queryPlaylist from './queryPlaylist'
 import * as queryExplorePlaylist from './queryExplorelist'
 import * as mutationCreatePlaylist from './mutationCreatePlaylist'
@@ -9,7 +10,7 @@ import * as mutationDeleteSavedPlaylist from './mutationDeleteSavedPlaylist'
 import * as querySavedPlaylist from './querySavedPlaylist'
 import  { merge } from 'lodash'
 
-var typeDefs = [ typePlaylist ]
+var typeDefs = [ typePlaylist, typeSavedPlaylist ]
 
 var queries = [
   queryPlaylist, 

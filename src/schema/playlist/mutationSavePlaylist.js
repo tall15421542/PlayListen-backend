@@ -13,7 +13,7 @@ export const inputTypeDef = `
 
 export const payloadTypeDef = `
   type SavePlaylistPayload{
-    savedList: [Playlist!]
+    success: Boolean
   }
 `
 
@@ -21,12 +21,7 @@ export const resolver = {
   Mutation: {
     savePlaylist: async(parent, {data}, {model}) =>{
       await model.savedPlaylist.create(data)
-      const listIds = await model.savedPlaylist.getListIdsByUserId(data.userId)
-      const lists = await listByIdLoader.loadMany(listIds)
-      const savedList = lists.map(list => {
-        return songList_database_to_graphql(list)
-      })
-      return { savedList }
+      return { success: true }
     }
   }
 }
