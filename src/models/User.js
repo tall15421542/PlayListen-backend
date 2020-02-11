@@ -155,7 +155,6 @@ User.prototype.getGoogleAccessToken = async function(userId){
       grant_type: "refresh_token"
     })
     .then(function (response) {
-      console.log("Promise")
       accessToken = response.data.access_token;
     })
     .catch(function (error) {

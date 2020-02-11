@@ -26,7 +26,12 @@ pool.prototype.getData = function(query){
           if (error) {
             throw error
           }
-          console.log('success')
+          if(result.length === 0){
+            console.log('Empty')
+          }
+          else{
+            console.log('success')
+          }
           conn.release()
           resolve(result)
         })

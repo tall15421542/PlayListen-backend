@@ -1,3 +1,4 @@
+import { listByIdLoader } from '../../loader/index'
 export const schema = `
   deletePlaylist(data: DeletePlaylistInput!): DeletePlaylistPayload!
 `
@@ -15,6 +16,7 @@ export const resolver = {
   Mutation:{
     deletePlaylist: async(parent, {data}, {model}) => {
       model.songList.delete(data.listId)
+      listByIdLoader.clear(data.listId)
       return { listId: data.listId }
     }
   }

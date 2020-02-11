@@ -6,6 +6,26 @@ function song(conn, source){
 }
 
 // Object Method
+song.prototype.getSongsByListIds = async function(listIds){
+  var sql = `SELECT * FROM Song WHERE `
+  listIds.forEach((listId, index, arr) => {
+    sql += ` listId = ? `
+    if(index !== arr.length - 1) sql += ` OR `
+  })
+  const query = mysql.format(sql, listIds)
+  const songs = await this.conn.getData(query)
+  var ret = {}
+  songs.forEach(song => {
+    if(ret[song.listId]){
+      ret[song.listId].push(song)
+    }
+    else{
+      ret[song.listId] = [song]
+    }
+  })
+  return ret;
+}
+
 song.prototype.createMultipleInstance = async function(listId, songs, sourceType){
   await this.source[sourceType].setDuration(songs)
   const sql = 'INSERT INTO Song (listId, sourceId, songName, songCover, songDes, duration) VALUES ?'

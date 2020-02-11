@@ -8,6 +8,17 @@ function songlist(conn, songModel){
 }
 
 // Object Method
+songlist.prototype.getByIds = async function(ids){
+  var sql = 'SELECT * from List where '
+  for(var i = 0 ; i < ids.length ; ++i){
+    sql += " listId = ? "
+    if(i != ids.length - 1) sql += " OR "
+  }
+  const insert = ids;
+  const query = mysql.format(sql, insert);
+  var results = await this.conn.getData(query);
+  return results 
+}
 songlist.prototype.getById = async function(listId){
   const sql = 'SELECT * from List where listId = ?'
   const insert = [listId];
@@ -20,7 +31,6 @@ songlist.prototype.getById = async function(listId){
 }
 
 songlist.prototype.create = async function(CreateSonglistInput, sourceType){
-  console.log(CreateSonglistInput)
   const sql = 'INSERT INTO List SET ?'
   if(!CreateSonglistInput.listId)
     CreateSonglistInput.listId = shortid.generate()
@@ -41,13 +51,20 @@ songlist.prototype.delete = async function(id){
 }
 
 songlist.prototype.update = async function(UpdatePlaylistInput){
-  console.log(UpdatePlaylistInput)
-  this.delete(UpdatePlaylistInput.oldId)
+  await this.delete(UpdatePlaylistInput.oldId)
   var playlist = UpdatePlaylistInput.listInfo;
   playlist.createdAt = UpdatePlaylistInput.createdAt
   playlist.listId = UpdatePlaylistInput.oldId
   var insertId = await this.create(playlist, "youtube")
   return await this.getById(insertId)
+}
+
+songlist.prototype.getListIdsByUser = async function(userId){
+  const sql = `SELECT listId From List l where l.userId = ?`
+  const insert = [userId]
+  const query = mysql.format(sql, insert)
+  const listIds = await this.conn.getData(query)
+  return listIds.map(listId => listId.listId)
 }
 
 songlist.prototype.getByUser = async function(userId){
@@ -68,6 +85,16 @@ songlist.prototype.getRandom = async function(num){
   const query = `SELECT * FROM List ORDER BY RAND() LIMIT ${num}`;
   const lists = await this.conn.getData(query);
   return lists;
+}
+
+songlist.prototype.getExploreListIds = async function(num){
+  return await this.getRandomIds(num)
+}
+
+songlist.prototype.getRandomIds = async function(num){
+  const query = `SELECT listId FROM List ORDER BY RAND() LIMIT ${num}`;
+  const listIds = await this.conn.getData(query)
+  return listIds
 }
 
 // Helper method
@@ -128,8 +155,10 @@ export function userList_database_to_graphql(userList_database){
     var list = userList_database[listIdx];
     var retList = songList_database_to_graphql(list)
     retList.songs = []
-    for(var songIdx = 0 ; songIdx < list.songs.length ; ++songIdx){
-      retList.songs.push(song_database_to_graphql(list.songs[songIdx]))
+    if(list.songs){
+      for(var songIdx = 0 ; songIdx < list.songs.length ; ++songIdx){
+        retList.songs.push(song_database_to_graphql(list.songs[songIdx]))
+      }
     }
     ret.push(retList)
   }

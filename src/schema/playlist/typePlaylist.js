@@ -1,5 +1,6 @@
 import { user_database_to_graphql } from '../../models/user'
 import { songs_to_graphql } from '../../models/songList'
+import { userByIdLoader, songsByListIdLoader } from '../../loader/index'
 
 export const schema = `
   type Playlist{
@@ -16,16 +17,12 @@ export const schema = `
 export const resolver = {
   Playlist: {
     songs: async (playlist, args, { model} ) => {
-      if(playlist.songs){
-        console.log("I have")
-        console.log(playlist.songs)
-        return playlist.songs
-      }
-      const result = await model.song.getMultipleInstance(playlist.id)
+      // const result = await model.song.getMultipleInstance(playlist.id)
+      const result = await songsByListIdLoader.load(playlist.id) 
       return songs_to_graphql(result)
     },
     owner: async(playlist, args, {model} ) => {
-      const result = await model.user.getById(playlist.ownerId)
+      const result = await userByIdLoader.load(playlist.ownerId)
       return user_database_to_graphql(result)
     }
   }

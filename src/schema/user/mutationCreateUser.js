@@ -1,4 +1,5 @@
-import { user_database_to_authentication_result } from '../../models/user'
+import { user_database_to_authentication_result, user_database_to_graphql } from '../../models/user'
+import { userByIdLoader } from '../../loader/index'
 export const schema = `
   createUser(data: CreateUserInput): CreateUserPayload!
 `
@@ -22,6 +23,7 @@ export const resolver = {
       const exist = await model.user.exist(data)
       if(!exist){
         const user = await model.user.create(data)
+        userByIdLoader.prime(user.userId, user)
         return user_database_to_authentication_result(user)
       }
       return{

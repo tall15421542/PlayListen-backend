@@ -7,8 +7,6 @@ import querystring from 'querystring'
 
 var model = new Model()
 var router = express.Router();
-router.use(passport.initialize());
-router.use(passport.session());
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -18,33 +16,15 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   },
   async function(req, accessToken, refreshToken, profile, done) {
-    var user = await getLoginUser(req);
-    // login
+    const user = await model.user.getByGoogleId(profile.id)
     if(user){
-      await model.user.connectGoogle(user.id, {accessToken: accessToken, refreshToken: refreshToken, id: profile.id}); 
       return done(null, user);
     }
-    // not log in
     else{
-      const user = await model.user.getByGoogleId(profile.id)
-      if(user){
-        return done(null, user_database_to_graphql(user));
-      }
-      else{
-        return done(null, null);
-      }
+      return done(null, null);
     }
   }
 ));
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser(async (user, done) => {
-  // const user = await model.user.getById(id);
-  done(null, user);
-});
 
 router.get('/', passport.authenticate('google', { 
   scope: ['https://www.googleapis.com/auth/plus.login',
@@ -57,16 +37,12 @@ router.get('/', passport.authenticate('google', {
 router.get('/callback',
   passport.authenticate('google', { failureRedirect: 'Unauthorized'}),
   function(req, res) {
-    req.session.user = req.user
-    req.session.token = createToken(req.user)
-    req.session.result = 'success'
+    req.session.authResult = user_database_to_authentication_result(req.user)
     res.json(req.session)
   });
 
 router.get('/Unauthorized', function(req, res){
-  req.session.user = null
-  req.session.token = null
-  req.session.result = 'failed'
+  req.session.authResult = user_database_to_authentication_result(null)
   res.json(req.session)
 })
 

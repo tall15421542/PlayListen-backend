@@ -14,3 +14,6 @@ function model(){
 
 export default model;
 
+const modelInstance = new model()
+export { modelInstance }
+

@@ -1,4 +1,5 @@
 import { songList_database_to_graphql } from '../../models/songList'
+import { listByIdLoader } from '../../loader/index'
 
 export const schema = `
   createPlaylist(data: CreatePlaylistInput!): Playlist!
@@ -20,6 +21,7 @@ export const resolver = {
     createPlaylist: async(parent, {data}, {model}) =>{
       const listId = await model.songList.create(data, 'youtube')
       const list = await model.songList.getById(listId)
+      listByIdLoader.prime(listId, list)
       return songList_database_to_graphql(list) 
     }
   }

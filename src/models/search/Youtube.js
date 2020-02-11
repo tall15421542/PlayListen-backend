@@ -49,14 +49,12 @@ Youtube.prototype.getSingleURLInfo = async function(URL) {
 Youtube.prototype.getURLInfoArray = async function(URL) {
   var result
   if ((result = URL.match(this.listReg))) {
-    console.log('it is a song list');
     const listId = result[1];
     const playlistArray = await this.getPlayListInfo(listId);
     return playlistArray;
   }
 
   if (this.songReg.test(URL)) {
-    console.log('single song url');
     const singleSongInfo = await this.getSingleURLInfo(URL);
     return singleSongInfo;
   }

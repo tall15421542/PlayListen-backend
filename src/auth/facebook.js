@@ -7,8 +7,6 @@ import querystring from 'querystring'
 
 var model = new Model()
 var router = express.Router();
-router.use(passport.initialize());
-router.use(passport.session());
 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
@@ -19,27 +17,21 @@ passport.use(new FacebookStrategy({
   },
   async function(req, accessToken, refreshToken, profile, done) {
     const user = await model.user.getByFacebookId(profile.id)
-    if(user) return done(null, user_database_to_authentication_result(user))
-    return done(null, {
-      result: 'facebookSignUp',
-      token: null,
-      user: {
-        facebookAccessToken: accessToken,
-        facebookId: profile.id,
-        email: profile.emails[0].value
+    if(user) return done(null, user)
+    else{
+      req.session.authResult = {
+        result: 'facebookSignUp',
+        token: null,
+        user:{
+          facebookAccessToken: accessToken,
+          facebookId: profile.id,
+          email: profile.emails[0].value
+        }
       }
-    })
+    }
+    return done(null, null);
   }
 ));
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser(async (user, done) => {
-  console.log("deserial")
-  done(null, user);
-});
 
 router.get('/', passport.authenticate('facebook', { 
   scope: ['email'],
@@ -50,11 +42,14 @@ router.get('/', passport.authenticate('facebook', {
 router.get('/callback',
   passport.authenticate('facebook', { failureRedirect: process.env.FACEBOOK_FAIL_REDIRECT_URL}),
   function(req, res) {
-    req.session.authResult = req.user
+    if(req.user){
+      req.session.authResult = user_database_to_authentication_result(req.user)
+    }
     res.redirect(process.env.FACEBOOK_SUCCESS_REDIRECT_URL)
   });
 
 router.get('/user', (req, res) => {
+  console.log(req.session.authResult)
   if (req.session && req.session.authResult) {
     res.json(req.session.authResult);
   } else {

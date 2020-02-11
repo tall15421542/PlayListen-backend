@@ -1,4 +1,5 @@
 import { userList_database_to_graphql } from '../../models/songList'
+import { listByIdLoader } from '../../loader/index'
 
 export const schema = `
   type User{
@@ -20,7 +21,9 @@ export const schema = `
 export const resolver = {
   User: {
     playlists: async(user, args, {model}) => {
-      const userList = await model.songList.getByUser(user.id);
+      // const userList = await model.songList.getByUser(user.id);
+      const listIds = await model.songList.getListIdsByUser(user.id)
+      const userList = await listByIdLoader.loadMany(listIds)
       return userList_database_to_graphql(userList);
     },
 

@@ -20,7 +20,6 @@ export const resolver = {
   Mutation: {
     signIn: async(parent, {data}, {model}) => {
       const user = await model.user.getByName(data.userName)
-      console.log(user)
       if(user && user.password === data.password){
         return user_database_to_authentication_result(user)
       }

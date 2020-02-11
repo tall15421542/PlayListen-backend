@@ -9,8 +9,19 @@ import session from 'express-session'
 import { Auth } from './auth/index'
 import bodyParser from 'body-parser'
 import path from 'path'
+import passport from 'passport'
 
 var model = new db()
+passport.serializeUser((user, done) => {
+  console.log("serial")
+  if(user.userId) done(null, user.userId);
+});
+
+passport.deserializeUser(async (userId, done) => {
+  console.log("deserial")
+  const user = await model.user.getById(userId)
+  done(null, user);
+});
 
 const app = express();
 app.use('/static', express.static(path.join(__dirname, 'public')))
@@ -26,6 +37,8 @@ app.use(session({
     resave: false
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/auth', Auth);
 
 const server = new ApolloServer({
