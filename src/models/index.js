@@ -1,7 +1,7 @@
 import connection from './pool'
 import songListModel from './songList'
 import songModel from './song'
-import userModel from './User'
+import userModel from './user'
 import Search from './search/index'
 
 function model(){
