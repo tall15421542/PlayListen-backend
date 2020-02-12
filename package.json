@@ -36,8 +36,8 @@
     "@babel/preset-env": "^7.6.2"
   },
   "scripts": {
-    "dev": "NODE_ENV=dev nodemon --exec babel-node -r node_modules/dotenv-flow/config src/index.js",
-    "start": "NODE_ENV=prod nodemon --exec babel-node -r node_modules/dotenv-flow/config src/index.js",
+    "dev": "NODE_ENV=dev nodemon --exec babel-node -r ./node_modules/dotenv-flow/config src/index.js",
+    "start": "NODE_ENV=prod nodemon --exec babel-node -r ./node_modules/dotenv-flow/config src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

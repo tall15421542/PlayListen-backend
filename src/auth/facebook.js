@@ -2,7 +2,7 @@ import passport from "passport"
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import express from 'express' 
 import Model from '../models/index'
-import { createToken, getLoginUser, user_database_to_authentication_result, user_database_to_graphql } from '../models/User'
+import { createToken, getLoginUser, user_database_to_authentication_result, user_database_to_graphql } from '../models/user'
 import querystring from 'querystring'
 
 var model = new Model()
