@@ -6,7 +6,7 @@ function savedPlaylist(conn){
 
 // Object Method
 savedPlaylist.prototype.create = async function(savePlaylistInput){
-  const sql = `INSERT INTO SavedPlaylist SET ?`;
+  const sql = `INSERT IGNORE INTO SavedPlaylist SET ?`;
   const insert = savePlaylistInput
   const query = mysql.format(sql, insert)
   const result = await this.conn.applyQuery(query)

@@ -1,4 +1,4 @@
-import { userList_database_to_graphql } from '../../models/songList'
+import { userList_database_to_graphql, songList_database_to_graphql } from '../../models/songList'
 import { listByIdLoader } from '../../loader/index'
 
 export const schema = `
@@ -9,12 +9,12 @@ export const schema = `
     bio: String
     avatar: String
     playlists: [Playlist!]
-    savedLists: [Playlist]
     followingList: [User]
     googleId: String
     googleAccessToken: String
     facebookId: String
     facebookAccessToken: String
+    savedPlaylists: [SavedPlaylist]
   }
 `
 
@@ -29,6 +29,16 @@ export const resolver = {
 
     googleAccessToken: async(user, args, {model}) => {
       return await model.user.getGoogleAccessToken(user.id)
+    },
+
+    savedPlaylists: async(user, args, {model}) => {
+      const saveLists = await model.savedPlaylist.getByUserId(user.id);
+      var playlists = await listByIdLoader.loadMany(saveLists.map(saveList => saveList.listId))
+      var ret = []
+      for(var i = 0 ; i < playlists.length ; ++i){
+        ret.push({playlist: songList_database_to_graphql(playlists[i]), savedAt: saveLists[i].savedAt})
+      }
+      return ret;
     }
   }
 }

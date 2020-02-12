@@ -7,7 +7,6 @@ import * as mutationUpdatePlaylist from './mutationUpdatePlaylist'
 import * as mutationDeletePlaylist from './mutationDeletePlaylist'
 import * as mutationSavePlaylist from './mutationSavePlaylist'
 import * as mutationDeleteSavedPlaylist from './mutationDeleteSavedPlaylist'
-import * as querySavedPlaylist from './querySavedPlaylist'
 import  { merge } from 'lodash'
 
 var typeDefs = [ typePlaylist, typeSavedPlaylist ]
@@ -15,7 +14,6 @@ var typeDefs = [ typePlaylist, typeSavedPlaylist ]
 var queries = [
   queryPlaylist, 
   queryExplorePlaylist,
-  querySavedPlaylist
 ]
 
 var mutations = [
