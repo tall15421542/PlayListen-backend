@@ -13,7 +13,6 @@ router.use('/signOut', function(req, res){
   if(req.session && req.session.authResult){
     delete req.session.authResult
   }
-  console.log(req.session)
   res.json({})
 })
 
