@@ -26,7 +26,7 @@ export const resolver = {
       const result = await userByIdLoader.load(playlist.ownerId)
       return user_database_to_graphql(result)
     },
-    isSaved: async(playlist, args, {model, me} ) => {
+    isSaved: async(playlist, args, {model, me}) => {
       if(!me) return false
       const savedLists = await model.savedPlaylist.getByUserId(me.id)
       for(var savedList of savedLists){
