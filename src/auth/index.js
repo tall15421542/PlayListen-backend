@@ -14,7 +14,7 @@ router.use('/signOut', function(req, res){
     delete req.session.authResult
   }
   console.log(req.session)
-  res.redirect(process.env.SIGNOUT_REDIRECT_URL)
+  res.json({})
 })
 
 export { router as Auth }
