@@ -21,4 +21,19 @@ Follow.prototype.delete = async function(DeleteFollowInput){
   return result
 }
 
+Follow.prototype.getFollowerIds = async function(userId){
+  const sql = `SELECT followerId FROM Follow where followeeId = ?`
+  const insert = [userId]
+  const query = mysql.format(sql, insert)
+  const followerIds = await this.conn.getData(query)
+  return followerIds.map(follower => follower.followerId)
+}
+
+Follow.prototype.getFolloweeIds = async function(userId){
+  const sql = `SELECT followeeId FROM Follow where followerId = ?`
+  const insert = [userId]
+  const query = mysql.format(sql, insert)
+  const followeeIds = await this.conn.getData(query)
+  return followeeIds.map(followee => followee.followeeId)
+}
 export default Follow

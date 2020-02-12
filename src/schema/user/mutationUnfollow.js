@@ -1,21 +1,21 @@
 export const schema = `
-  createFollow(data: CreateFollowInput): CreateFollowPayload!
+  unFollow(data: UnFollowInput): UnFollowPayload!
 `
 export const inputTypeDef = `
-  input CreateFollowInput{
+  input UnFollowInput{
     followerId: String!
     followeeId: String!
   }
 `
 export const payloadTypeDef = `
-  type CreateFollowPayload{
+  type UnFollowPayload{
     success: Boolean!
   }
 `
 export const resolver = {
   Mutation: {
-    createFollow: async(parent, {data}, {model}) => {
-      await model.follow.create(data)
+    unFollow: async(parent, {data}, {model}) => {
+      await model.follow.delete(data)
       return {
         success: true
       }

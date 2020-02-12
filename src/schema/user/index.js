@@ -4,6 +4,7 @@ import * as mutationCreateUser from './mutationCreateUser'
 import * as mutationSignIn from './mutationSignIn'
 import * as mutationCreateUserByFacebook from './mutationCreateUserByFacebook'
 import * as mutationCreateFollow from './mutationCreateFollow'
+import * as mutationUnfollow from './mutationUnfollow'
 import  { merge } from 'lodash'
 
 var typeDefs = [ typeUser ]
@@ -12,7 +13,8 @@ var mutations = [
   mutationCreateUser, 
   mutationSignIn,
   mutationCreateUserByFacebook,
-  mutationCreateFollow
+  mutationCreateFollow,
+  mutationUnfollow,
 ]
 
 export const typedef = `
