@@ -17,6 +17,7 @@ export const schema = `
     savedPlaylists: [SavedPlaylist]
     followers: [User]
     followees: [User]
+    isFollowing: Boolean!
   }
 `
 
@@ -41,11 +42,11 @@ export const resolver = {
         ret.push({playlist: songList_database_to_graphql(playlists[i]), savedAt: saveLists[i].savedAt})
       }
       return ret;
-    }
+    },
+
     followers: async(user, args, {model}) => {
       const followerIds = await model.follow.getFollowerIds(user.id)
       const followers = await userByIdLoader.loadMany(followerIds)
-      console.log(followers)
       return followers.map(follower => user_database_to_graphql(follower))
     },
 
@@ -53,6 +54,15 @@ export const resolver = {
       const followeeIds = await model.follow.getFolloweeIds(user.id)
       const followees = await userByIdLoader.loadMany(followeeIds)
       return followees.map(followee => user_database_to_graphql(followee))
+    },
+
+    isFollowing: async(user, args, {model, me}) => {
+      if(!me) return false 
+      const followeeIds = await model.follow.getFolloweeIds(me.id)
+      for(var followeeId of followeeIds){
+        if(followeeId === user.id) return true
+      }
+      return false
     }
   }
 }
