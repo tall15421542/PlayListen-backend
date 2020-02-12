@@ -12,6 +12,7 @@ export const schema = `
     createdAt: Date!
     updatedAt: Date!
     songs: [Song!]!
+    isSaved: Boolean!
   }
 `
 export const resolver = {
@@ -24,6 +25,16 @@ export const resolver = {
     owner: async(playlist, args, {model} ) => {
       const result = await userByIdLoader.load(playlist.ownerId)
       return user_database_to_graphql(result)
+    },
+    isSaved: async(playlist, args, {model, me}) => {
+      if(!me) return false
+      const savedLists = await model.savedPlaylist.getByUserId(me.id)
+      for(var savedList of savedLists){
+        if(savedList.listId === playlist.id){
+          return true
+        }
+      }
+      return false
     }
   }
 }

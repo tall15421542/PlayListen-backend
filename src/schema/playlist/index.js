@@ -1,17 +1,19 @@
 import * as typePlaylist from './typePlaylist'
+import * as typeSavedPlaylist from './typeSavedPlaylist'
 import * as queryPlaylist from './queryPlaylist'
 import * as queryExplorePlaylist from './queryExploreList'
 import * as mutationCreatePlaylist from './mutationCreatePlaylist'
 import * as mutationUpdatePlaylist from './mutationUpdatePlaylist'
 import * as mutationDeletePlaylist from './mutationDeletePlaylist'
 import * as mutationSavePlaylist from './mutationSavePlaylist'
+import * as mutationDeleteSavedPlaylist from './mutationDeleteSavedPlaylist'
 import  { merge } from 'lodash'
 
-var typeDefs = [ typePlaylist ]
+var typeDefs = [ typePlaylist, typeSavedPlaylist ]
 
 var queries = [
   queryPlaylist, 
-  queryExplorePlaylist
+  queryExplorePlaylist,
 ]
 
 var mutations = [
@@ -19,6 +21,7 @@ var mutations = [
   mutationUpdatePlaylist, 
   mutationDeletePlaylist,  
   mutationSavePlaylist,
+  mutationDeleteSavedPlaylist
 ]
 
 var resolvers_arr = typeDefs.map(e => e.resolver).concat(queries.map(e => e.resolver)).concat(mutations.map(e => e.resolver))

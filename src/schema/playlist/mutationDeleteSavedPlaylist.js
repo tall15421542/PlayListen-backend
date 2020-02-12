@@ -1,26 +1,25 @@
 import { listByIdLoader } from '../../loader/index'
 import { songList_database_to_graphql } from '../../models/songList'
-
 export const schema = `
-  savePlaylist(data: SavePlaylistInput!): SavePlaylistPayload!
+  deleteSavedPlaylist(data: DeleteSavedPlaylistInput!): DeleteSavedPlaylistPayload!
 `
 export const inputTypeDef = `
-  input SavePlaylistInput{
+  input DeleteSavedPlaylistInput{
     userId: String!
     listId: String!
   }
 `
 
 export const payloadTypeDef = `
-  type SavePlaylistPayload{
+  type DeleteSavedPlaylistPayload{
     success: Boolean
   }
 `
 
 export const resolver = {
   Mutation: {
-    savePlaylist: async(parent, {data}, {model}) =>{
-      await model.savedPlaylist.create(data)
+    deleteSavedPlaylist: async(parent, {data}, {model}) =>{
+      await model.savedPlaylist.delete(data)
       return { success: true }
     }
   }
