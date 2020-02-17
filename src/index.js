@@ -47,7 +47,7 @@ const server = new ApolloServer({
     context: async({req}) => {
         const token = req.headers['x-token']
         if(token){
-            const me = await jwt.verify(token, process.env.TOKEN_SECRET);
+            const me = await jwt.decode(token, process.env.TOKEN_SECRET);
             return{
                 me: me, 
                 model: model
