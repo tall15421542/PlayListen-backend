@@ -192,6 +192,14 @@ User.prototype.connectFacebook = async function(userId, facebookInfo){
   const query = mysql.format(sql, insert)
   const result = await this.conn.applyQuery(query);
 }
+
+User.prototype.searchByPrefix = async function(prefix){
+  const sql = 'SELECT * FROM User WHERE userName like ?'
+  const insert = [(prefix + '%')]
+  const query = mysql.format(sql, insert)
+  const result = await this.conn.getData(query)
+  return result;
+}
 export default User
 
 // helper 

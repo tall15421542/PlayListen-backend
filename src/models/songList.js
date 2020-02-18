@@ -97,6 +97,14 @@ songlist.prototype.getRandomIds = async function(num){
   return listIds
 }
 
+songlist.prototype.searchByPrefix = async function(prefix){
+  const sql = 'SELECT * FROM List WHERE listName like ?'
+  const insert = [(prefix + '%')]
+  const query = mysql.format(sql, insert)
+  const playlists = await this.conn.getData(query)
+  return playlists
+}
+
 // Helper method
 function CreateSonglistInput_to_DatabaseSchema(CreateSonglistInput){
   if(CreateSonglistInput.createdAt){

@@ -1,38 +1,41 @@
-import { songs_to_graphql } from '../../models/songList'
+import  { merge } from 'lodash'
+import * as querySearchResult from './querySearchResult'
+import * as querySearchUser from './querySearchUser'
+import * as querySearchPlaylist from './querySearchPlaylist'
+
+var typeDefs = []
+var queries = [
+  querySearchResult,
+  querySearchUser,
+  querySearchPlaylist,
+]
+var mutations = []
+
+
 export const typedef = `
-  type SearchItem{
-    type: Int!
-    playlist: Playlist
-    user: User
-  }
+  ${typeDefs.map(e => e.schema).join('\n')}
 `
 
 export const query = `
-    searchResult(query: String!): [Song!]
-    search(data: SearchInput!): SearchPayload!
+  ${queries.map(e => e.schema).join('\n')}
 `
 
 export const mutation = `
+  ${mutations.map(e => e.schema).join('\n')}
 `
 
 export const mutationInput = `
-  input SearchInput{
-    prefix: String!
-    limit: Int!
-  }
+  ${mutations.map(e => e.inputTypeDef).join('\n')}
 `
 
 export const mutationPayload=`
-  type SearchPayload{
-    result: [SearchItem]
-  }
+  ${mutations.map(e => e.payloadTypeDef).join('\n')}
 `
 
-export const resolvers = {
-  Query:{
-    searchResult: async(parent, {query}, {model}) => {
-        const result = await model.search.youtube.getURLInfoArray(query)
-        return songs_to_graphql(result)
-    },
-  }
-}
+var resolvers_arr = typeDefs.map(e => e.resolver).concat(queries.map(e => e.resolver)).concat(mutations.map(e => e.resolver))
+var resolvers = {}
+resolvers_arr.forEach((e) => { 
+  resolvers = merge(resolvers, e)
+})
+
+export { resolvers }
