@@ -37,4 +37,11 @@ savedPlaylist.prototype.delete = async function(deleteSavedPlaylistInput){
   return result
 }
 
+savedPlaylist.prototype.deleteByListId = async function(listId){
+  const sql = `DELETE FROM SavedPlaylist WHERE listId = ?`
+  const insert = [listId]
+  const query = mysql.format(sql, insert)
+  await this.conn.applyQuery(query)
+}
+
 export default savedPlaylist; 

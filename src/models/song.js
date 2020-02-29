@@ -26,6 +26,13 @@ song.prototype.getSongsByListIds = async function(listIds){
   return ret;
 }
 
+song.prototype.delete = async function(listId){
+  const sql = `Delete FROM Song WHERE listId = ?`
+  const insert = [listId]
+  const query = mysql.format(sql, insert)
+  await this.conn.getData(query)
+}
+
 song.prototype.createMultipleInstance = async function(listId, songs, sourceType){
   await this.source[sourceType].setDuration(songs)
   const sql = 'INSERT INTO Song (listId, sourceId, songName, songCover, songDes, duration) VALUES ?'

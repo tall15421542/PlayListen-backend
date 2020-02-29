@@ -51,12 +51,16 @@ songlist.prototype.delete = async function(id){
 }
 
 songlist.prototype.update = async function(UpdatePlaylistInput){
-  await this.delete(UpdatePlaylistInput.oldId)
   var playlist = UpdatePlaylistInput.listInfo;
   playlist.createdAt = UpdatePlaylistInput.createdAt
   playlist.listId = UpdatePlaylistInput.oldId
-  var insertId = await this.create(playlist, "youtube")
-  return await this.getById(insertId)
+  const sql = 'UPDATE List SET ? WHERE listId = ?'
+  const insert = [CreateSonglistInput_to_DatabaseSchema(playlist), playlist.listId]
+  const query = mysql.format(sql, insert)
+  await this.conn.applyQuery(query)
+  await this.songModel.delete(playlist.listId)
+  await this.songModel.createMultipleInstance(playlist.listId, playlist.songs, 'youtube') // Promise
+  return await this.getById(playlist.listId)
 }
 
 songlist.prototype.getListIdsByUser = async function(userId){
