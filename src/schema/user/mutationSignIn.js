@@ -24,12 +24,14 @@ export const resolver = {
         return user_database_to_authentication_result(user)
       }
       if(user && user.password !== data.password){
+        console.log("password fail")
         return{
           user: null, 
           token: null,
           result: 'password_fail'
         }
       }
+      console.log("not exist")
       return{
         user: null,
         token: null,

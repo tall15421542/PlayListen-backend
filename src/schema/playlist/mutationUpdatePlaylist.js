@@ -1,5 +1,5 @@
 import { songList_database_to_graphql } from '../../models/songList'
-import { listByIdLoader } from '../../loader/index'
+import { listByIdLoader, songsByListIdLoader } from '../../loader/index'
 
 export const schema = `
   updatePlaylist(data: UpdatePlaylistInput!): Playlist!
@@ -19,7 +19,7 @@ export const resolver = {
     updatePlaylist: async(parent, {data}, {model}) => {
       const list = await model.songList.update(data)
       listByIdLoader.clear(list.listId)
-      listByIdLoader.prime(list.listId, list)
+      songsByListIdLoader.clear(list.listId)
       return songList_database_to_graphql(list)
     },
   }

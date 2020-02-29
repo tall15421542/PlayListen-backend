@@ -18,8 +18,7 @@ export const schema = `
 export const resolver = {
   Playlist: {
     songs: async (playlist, args, { model} ) => {
-      // const result = await model.song.getMultipleInstance(playlist.id)
-      const result = await songsByListIdLoader.load(playlist.id) 
+      const result = await songsByListIdLoader.load(playlist.id)
       return songs_to_graphql(result)
     },
     owner: async(playlist, args, {model} ) => {
